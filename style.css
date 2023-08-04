@@ -1,0 +1,12 @@
+body{
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     font-family: sans-serif;
+}
+
+#btn{
+     background-color: grey;
+     color: white;
+     cursor: pointer;
+}
