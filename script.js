@@ -9,18 +9,21 @@ let totalAmount = document.getElementById('totalAmount')
 const addProductDetails = () => {
      // list item 
      let productDetail = document.createElement('li')
+     productDetail.id = 'productDetail'
      productDetail.textContent = `${sellingPrice.value} - ${productName.value}`
      // delete button
      let deleteBtn = document.createElement('button')
      deleteBtn.textContent = 'Delete'
+     deleteBtn.id = 'deleteBtn'
 
      // delete button functionality
-     let deleteFunction = (event) => {
+     const deleteFunction = (event) => {
           productDetail.remove()
           deleteBtn.remove()
 
           let productPrice = event.target.productDetail.textContent
-          let price = parseInt(productPrice.split(" - ")[0])
+          let price = productPrice.split(" ")[0]
+          price = parseInt(price)
           totalAmount.textContent = `${parseInt(totalAmount.textContent) - price}`
 
           // DELETE request
@@ -35,29 +38,31 @@ const addProductDetails = () => {
 
      // show product details
      productList.append(productDetail)
-     productList.appendChild(deleteBtn)
+     productDetail.appendChild(deleteBtn)
 
      // show total amount
      if (sellingPrice.value !== '') {
           totalAmount.textContent = `${parseInt(sellingPrice.value) + parseInt(totalAmount.textContent)}`
+          // save to locaStorage
+          localStorage.setItem(productName.value, productDetail.textContent)
+
+          // POST request
+          axios.post(`https://crudcrud.com/api/58b6f37eb7d0406a95bf678ee6ccf57a/productDetails`, {
+               sellingPrice: document.getElementById('sellingPrice').value,
+               productName: document.getElementById('productName').value
+          }).then((response) => {
+               console.log(response)
+          }).catch((error) => {
+               console.log(error)
+          })
      }
      else {
-          totalAmount.textContent = 0
+          totalAmount.textContent = parseInt(totalAmount.textContent) + 0
      }
 
      // clear input fields
      sellingPrice.value = ""
      productName.value = ""
-
-     // POST request
-     axios.post(`https://crudcrud.com/api/58b6f37eb7d0406a95bf678ee6ccf57a/productDetails`, {
-          sellingPrice: document.getElementById('sellingPrice').value,
-          productName: document.getElementById('productName').value
-     }).then((response) => {
-          console.log(response)
-     }).catch((error) => {
-          console.log(error)
-     })
 }
 
 const retrieveProductDetails = () => {

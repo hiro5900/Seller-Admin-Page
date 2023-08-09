@@ -10,3 +10,7 @@ body{
      color: white;
      cursor: pointer;
 }
+
+#deleteBtn{
+     margin: 0 10px;
+}
