@@ -4,12 +4,13 @@ let productName = document.getElementById('productName')
 let button = document.getElementById('btn')
 let productList = document.getElementsByClassName('productList')[0]
 let totalAmount = document.getElementById('totalAmount')
+let count = 0
 
 // add product details
 const addProductDetails = () => {
      // list item 
      let productDetail = document.createElement('li')
-     productDetail.id = 'productDetail'
+     productDetail.id = `productDetail${count++}`
      productDetail.textContent = `${sellingPrice.value} - ${productName.value}`
      // delete button
      let deleteBtn = document.createElement('button')
@@ -18,13 +19,13 @@ const addProductDetails = () => {
 
      // delete button functionality
      const deleteFunction = (event) => {
-          productDetail.remove()
-          deleteBtn.remove()
-
-          let productPrice = event.target.productDetail.textContent
+          let productPrice = event.target.parentElement.textContent
           let price = productPrice.split(" ")[0]
           price = parseInt(price)
           totalAmount.textContent = `${parseInt(totalAmount.textContent) - price}`
+
+          productDetail.remove()
+          deleteBtn.remove()
 
           // DELETE request
           axios.delete(`https://crudcrud.com/api/58b6f37eb7d0406a95bf678ee6ccf57a/productDetails/${_id}`)
@@ -32,7 +33,7 @@ const addProductDetails = () => {
                     console.log(response)
                }).catch((error) => {
                     console.log(error)
-               })
+               })          
      }
      deleteBtn.addEventListener('click', deleteFunction)
 
